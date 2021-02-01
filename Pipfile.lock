@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "45cb7ff9633fe4c12ab6165b32a72aa66f451101bf729278f7abd5912d23af51"
+            "sha256": "fbfd2724ea9777bece55e61c1f1df2b509b51a515e9491cdf7fc7f2d9dc61e64"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -68,6 +68,14 @@
             "index": "pypi",
             "version": "==1.19.0"
         },
+        "dash-bootstrap-components": {
+            "hashes": [
+                "sha256:080bfbbd09fb126c72fdce6bdc40ff014975f9a2be8ed66bb8f0f02b7a20a781",
+                "sha256:29dd691c6075d1b11b86f3397870929041ca29beee88c8df96463008872e9dbd"
+            ],
+            "index": "pypi",
+            "version": "==0.11.1"
+        },
         "dash-core-components": {
             "hashes": [
                 "sha256:b61cb37322de91b4feb0d4d823694cbba8686f6459db774b53d553135350c71e"
@@ -111,8 +119,16 @@
             "hashes": [
                 "sha256:b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d"
             ],
-            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2'",
+            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==0.18.2"
+        },
+        "gunicorn": {
+            "hashes": [
+                "sha256:1904bb2b8a43658807108d59c3f3d56c2b6121a701161de0ddf9ad140073c626",
+                "sha256:cd4a810dd51bf497552cf3f863b575dabd73d6ad6a91075b65936b151cbf4f9c"
+            ],
+            "index": "pypi",
+            "version": "==20.0.4"
         },
         "itsdangerous": {
             "hashes": [
@@ -305,7 +321,7 @@
                 "sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259",
                 "sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==1.15.0"
         },
         "threadpoolctl": {
