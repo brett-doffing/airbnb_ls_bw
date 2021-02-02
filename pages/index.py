@@ -11,7 +11,7 @@ from app import app
 column1 = dbc.Col(
     [
         dcc.Input(id='occupancy', type='number',
-                  placeholder='Occupancy', min=1, max=10, step=1),
+                  placeholder='Max Occupancy', min=1, max=10, step=1),
         html.Br(), html.Br(),
         dcc.Input(id='cleaning_fee', type='number',
                   placeholder='Cleaning Fee'),
@@ -20,12 +20,16 @@ column1 = dbc.Col(
                   placeholder='Number of Listings', min=1, step=1),
         html.Br(), html.Br(),
         dcc.Input(id='availability_90', type='number',
-                  placeholder='Days Available Next 90 Days', min=1, max=90,
+                  placeholder='Next 90 Days Available', min=1, max=90,
                   step=1),
         html.Br(), html.Br(),
         dcc.Input(id='extra_person_fee', type='number',
                   placeholder='Extra Person Fee'),
-        html.Br(), html.Br(),
+    ]
+)
+
+column2 = dbc.Col(
+    [
         dcc.Input(id='num_reviews', type='number',
                   placeholder='Number of Reviews', step=1),
         html.Br(), html.Br(),
@@ -47,17 +51,26 @@ column1 = dbc.Col(
             ],
             value=1
         ),
-        html.Br(), html.Br(),
-        dcc.Link(dbc.Button('Make Price Prediction', color='primary',
-                            id='btn-submit', n_clicks=0), href='/predictions'),
-        # html.Button('Submit', id='btn-submit', n_clicks=0),
-        html.Br(),
-        html.Hr(),
-        html.Div(id='output-submit'),
     ]
 )
 
-layout = dbc.Row([column1])
+column_button = dbc.Col(
+    [
+        html.Br(),
+        html.Hr(),
+        html.Center(dcc.Link(dbc.Button('Make Price Prediction', color='primary',
+                                        id='btn-submit', n_clicks=0), href='/predictions')),
+    ]
+)
+
+layout = dbc.Container(
+    fluid=True,
+    children=[
+        dbc.Row([column1, column2]),
+        dbc.Row([column_button])
+    ],
+    style={'margin': 'auto'}
+)
 
 
 @app.callback(
