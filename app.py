@@ -1,5 +1,6 @@
 import dash
 import dash_bootstrap_components as dbc
+from flask_sqlalchemy import SQLAlchemy
 
 """
 https://github.com/facultyai/dash-bootstrap-components
@@ -44,15 +45,35 @@ dbc.themes.YETI
 """
 
 external_stylesheets = [
-    dbc.themes.UNITED, # Bootswatch theme
-    'https://use.fontawesome.com/releases/v5.9.0/css/all.css', # for social media icons
+    dbc.themes.UNITED,  # Bootswatch theme
+    'https://use.fontawesome.com/releases/v5.9.0/css/all.css',  # for social media icons
 ]
 
-meta_tags=[
+meta_tags = [
     {'name': 'viewport', 'content': 'width=device-width, initial-scale=1'}
 ]
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets, meta_tags=meta_tags)
-app.config.suppress_callback_exceptions = True # see https://dash.plot.ly/urls
-app.title = 'AirBnB Predictions' # appears in browser title bar
+app = dash.Dash(
+    __name__, external_stylesheets=external_stylesheets, meta_tags=meta_tags)
+app.config.suppress_callback_exceptions = True  # see https://dash.plot.ly/urls
+app.title = 'AirBnB Predictions'  # appears in browser title bar
 server = app.server
+server.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite3?check_same_thread=False"
+server.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+db = SQLAlchemy(server)
+
+
+class Listing(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    occupancy = db.Column(db.Integer())
+    cleaning_fee = db.Column(db.Float())
+    listing_count = db.Column(db.Integer())
+    availability_90 = db.Column(db.Integer())
+    extra_person_fee = db.Column(db.Float())
+    num_reviews = db.Column(db.Integer())
+    num_bath = db.Column(db.Float())
+    security_deposit = db.Column(db.Float())
+    min_nights = db.Column(db.Integer())
+    room = db.Column(db.Integer())
+
+db.create_all()

@@ -5,8 +5,9 @@ import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
 from dash.dependencies import Input, Output, State
+from flask_sqlalchemy import SQLAlchemy
 # Imports from this application
-from app import app
+from app import app, db, Listing
 
 column1 = dbc.Col(
     [
@@ -43,7 +44,7 @@ column2 = dbc.Col(
                   placeholder='Minimum Number of Nights', min=1, step=1),
         html.Br(), html.Br(),
         dcc.Dropdown(
-            id='rooms',
+            id='room',
             options=[
                 {'label': 'Entire House/apt', 'value': 1},
                 {'label': 'Private room', 'value': 2},
@@ -58,8 +59,9 @@ column_button = dbc.Col(
     [
         html.Br(),
         html.Hr(),
-        html.Center(dcc.Link(dbc.Button('Make Price Prediction', color='primary',
-                                        id='btn-submit', n_clicks=0), href='/predictions')),
+        html.Center((dbc.Button('Make Price Prediction', color='primary',
+                                id='btn-submit', n_clicks=0))),
+        html.Div(id='output-submit')
     ]
 )
 
@@ -85,11 +87,11 @@ layout = dbc.Container(
     State('num_bath', 'value'),
     State('security_deposit', 'value'),
     State('min_nights', 'value'),
-    State('rooms', 'value')
+    State('room', 'value')
 )
 def update_output(clicks, occupancy, cleaning_fee, listing_count,
                   availability_90, extra_person_fee, num_reviews,
-                  num_bath, security_deposit, min_nights, rooms):
+                  num_bath, security_deposit, min_nights, room):
     if clicks:
         df = pd.DataFrame(data={'occupancy': occupancy,
                                 'cleaning_fee': cleaning_fee,
@@ -100,8 +102,27 @@ def update_output(clicks, occupancy, cleaning_fee, listing_count,
                                 'num_bath': num_bath,
                                 'security_deposit': security_deposit,
                                 'min_nights': min_nights,
-                                'rooms': rooms},
+                                'room': room},
                           index=[0])
         df.to_csv('assets/predict.csv', index=False)
+        # try_connection()
 
-        # return '{}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(occupancy, cleaning_fee, listing_count, availability_90, extra_person_fee, num_reviews, num_bath, security_deposit, min_nights, rooms)
+        db.drop_all()
+        db.create_all()
+
+        record = Listing(occupancy=occupancy,
+                         cleaning_fee=cleaning_fee,
+                         listing_count=listing_count,
+                         availability_90=availability_90,
+                         extra_person_fee=extra_person_fee,
+                         num_reviews=num_reviews,
+                         num_bath=num_bath,
+                         security_deposit=security_deposit,
+                         min_nights=min_nights,
+                         room=room)
+        db.session.add(record)
+        db.session.commit()
+
+        return dcc.Location(pathname="/predictions", id="predictions")
+
+        # return '{}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(occupancy, cleaning_fee, listing_count, availability_90, extra_person_fee, num_reviews, num_bath, security_deposit, min_nights, room)
