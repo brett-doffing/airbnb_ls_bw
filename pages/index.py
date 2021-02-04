@@ -9,9 +9,9 @@ from dash.dependencies import Input, Output, State
 from app import app
 
 
-def get_prediction(occupancy, cleaning_fee, listing_count,
-                   availability_90, extra_person_fee, num_reviews,
-                   num_bath, num_bed, num_bedroom, security_deposit,
+def get_prediction(occupancy, listing_count,
+                   availability_90, num_reviews,
+                   num_bath, num_bed, num_bedroom,
                    min_nights, room_type, property_type, bathroom_type,
                    has_about, has_neighborhood_overview,
                    account_age, has_profile_pic, identity_verified,
@@ -22,9 +22,9 @@ def get_prediction(occupancy, cleaning_fee, listing_count,
     a message to the user to fix their input if not. Otherwise returns a price
     prediction by passing features to the price prediction model.
     """
-    features = [occupancy, cleaning_fee, listing_count,
-                availability_90, extra_person_fee, num_reviews,
-                num_bath, num_bed, num_bedroom, security_deposit,
+    features = [occupancy, listing_count,
+                availability_90, num_reviews,
+                num_bath, num_bed, num_bedroom,
                 min_nights, room_type, property_type, bathroom_type,
                 has_about, has_neighborhood_overview,
                 account_age, has_profile_pic, identity_verified,
@@ -60,9 +60,6 @@ column1 = dbc.Col(
         dcc.Input(id='occupancy', type='number',
                   placeholder='Max Occupancy', min=1, step=1),
         html.Br(), html.Br(),
-        dcc.Input(id='cleaning_fee', type='number',
-                  placeholder='Cleaning Fee'),
-        html.Br(), html.Br(),
         dcc.Input(id='listing_count', type='number',
                   placeholder='Number of Listings', min=1, step=1),
         html.Br(), html.Br(),
@@ -70,12 +67,8 @@ column1 = dbc.Col(
                   placeholder='Next 90 Days Available', min=1,
                   step=1),
         html.Br(), html.Br(),
-        dcc.Input(id='extra_person_fee', type='number',
-                  placeholder='Extra Person Fee'),
-        html.Br(), html.Br(),
-        dcc.Input(id='account_age', type='number',
-                  placeholder='Account Age in Years', min=0,
-                  step=1),
+        dcc.Input(id='min_nights', type='number',
+                  placeholder='Minimum Nights', min=1, step=1),
         html.Br(), html.Br(),
         dcc.Dropdown(
             id='bathroom_type',
@@ -143,12 +136,6 @@ column2 = dbc.Col(
         dcc.Input(id='num_bedroom', type='number',
                   placeholder='Number of Bedrooms', min=1, step=0.5),
         html.Br(), html.Br(),
-        dcc.Input(id='security_deposit', type='number',
-                  placeholder='Security Deposit'),
-        html.Br(), html.Br(),
-        dcc.Input(id='min_nights', type='number',
-                  placeholder='Minimum Nights', min=1, step=1),
-        html.Br(), html.Br(),
         dcc.Dropdown(
             id='room_type',
             options=get_options(
@@ -210,6 +197,39 @@ column2 = dbc.Col(
     ]
 )
 
+# Column for age slider
+column_slider = dbc.Col(
+    [
+        html.Br(),
+        html.Br(),
+        html.Center(dcc.Markdown('Account Age')),
+        html.Center(dcc.Slider(
+            id='account_age',
+            min=0,
+            max=14,
+            step=1,
+            marks={
+                0: '0',
+                1: '1',
+                2: '2',
+                3: '3',
+                4: '4',
+                5: '5',
+                6: '6',
+                7: '7',
+                8: '8',
+                9: '9',
+                10: '10',
+                11: '11',
+                12: '12',
+                13: '13',
+                14: '14',
+            },
+            value=7
+        ),)
+    ]
+)
+
 # Column for price prediction button
 column_button = dbc.Col(
     [
@@ -226,6 +246,7 @@ layout = dbc.Container(
     children=[
         dbc.Row([prediction_column]),
         dbc.Row([column1, column2]),
+        dbc.Row([column_slider]),
         dbc.Row([column_button])
     ],
     style={'margin': 'auto'}
@@ -237,15 +258,12 @@ layout = dbc.Container(
     Output('output-submit', 'children'),
     Input('btn-submit', 'n_clicks'),
     State('occupancy', 'value'),
-    State('cleaning_fee', 'value'),
     State('listing_count', 'value'),
     State('availability_90', 'value'),
-    State('extra_person_fee', 'value'),
     State('num_reviews', 'value'),
     State('num_bath', 'value'),
     State('num_bed', 'value'),
     State('num_bedroom', 'value'),
-    State('security_deposit', 'value'),
     State('min_nights', 'value'),
     State('room_type', 'value'),
     State('property_type', 'value'),
@@ -259,9 +277,9 @@ layout = dbc.Container(
     State('instant_bookable', 'value'),
     State('neighbourhood', 'value'),
 )
-def update_output(clicks, occupancy, cleaning_fee, listing_count,
-                  availability_90, extra_person_fee, num_reviews,
-                  num_bath, num_bed, num_bedroom, security_deposit,
+def update_output(clicks, occupancy, listing_count,
+                  availability_90, num_reviews,
+                  num_bath, num_bed, num_bedroom,
                   min_nights, room_type, property_type, bathroom_type,
                   has_about, has_neighborhood_overview,
                   account_age, has_profile_pic, identity_verified,
@@ -269,9 +287,9 @@ def update_output(clicks, occupancy, cleaning_fee, listing_count,
                   neighbourhood):
     if clicks:
         # Return prediction when button is clicked
-        return get_prediction(occupancy, cleaning_fee, listing_count,
-                              availability_90, extra_person_fee, num_reviews,
-                              num_bath, num_bed, num_bedroom, security_deposit,
+        return get_prediction(occupancy, listing_count,
+                              availability_90, num_reviews,
+                              num_bath, num_bed, num_bedroom,
                               min_nights, room_type, property_type,
                               bathroom_type, has_about, has_neighborhood_overview,
                               account_age, has_profile_pic, identity_verified,
