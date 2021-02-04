@@ -6,7 +6,7 @@ import dash_html_components as html
 import pandas as pd
 from dash.dependencies import Input, Output, State
 # Imports from this application
-from app import app
+from app import app, pipeline
 
 
 def get_prediction(occupancy, listing_count,
@@ -22,20 +22,33 @@ def get_prediction(occupancy, listing_count,
     a message to the user to fix their input if not. Otherwise returns a price
     prediction by passing features to the price prediction model.
     """
-    features = [occupancy, listing_count,
-                availability_90, num_reviews,
-                num_bath, num_bed, num_bedroom,
-                min_nights, room_type, property_type, bathroom_type,
-                has_about, has_neighborhood_overview,
-                account_age, has_profile_pic, identity_verified,
-                is_superhost, instant_bookable,
-                neighbourhood]
-    if None in features:
+    df = pd.DataFrame(data={'occupancy': occupancy,
+                            'listing_count': listing_count,
+                            'availability_90': availability_90,
+                            'num_reviews': num_reviews,
+                            'num_bath': num_bath,
+                            'num_bed': num_bed,
+                            'num_bedroom': num_bedroom,
+                            'min_nights': min_nights,
+                            'room_type': room_type,
+                            'property_type': property_type,
+                            'bathroom_type': bathroom_type,
+                            'has_about': has_about,
+                            'has_neighborhood_overview': has_neighborhood_overview,
+                            'account_age': account_age,
+                            'has_profile_pic': has_profile_pic,
+                            'identity_verified': identity_verified,
+                            'is_superhost': is_superhost,
+                            'instant_bookable': instant_bookable,
+                            'neighbourhood': neighbourhood
+                            },
+                      index=[0]
+                      )
+    if df.isnull().values.any():
         return dcc.Markdown('All fields must be filled!')
     else:
-        test = sum(features)
-        prediction = 'TEST: {}'.format(test)
-        return dcc.Markdown('You should charge {}'.format(prediction))
+        prediction = pipeline.predict(df)
+        return dcc.Markdown('You should charge ${} per night'.format(round(prediction[0]), 2))
 
 
 def get_options(options):
@@ -47,12 +60,6 @@ def get_options(options):
         opts.append({'label': opt.title(), 'value': opt})
     return opts
 
-
-# Column for displaying the app callback result after clicking
-# on the prediction button
-prediction_column = dbc.Col(
-    html.Center(id='output-submit')
-)
 
 # Column for first 5 features
 column1 = dbc.Col(
@@ -139,7 +146,7 @@ column2 = dbc.Col(
         dcc.Dropdown(
             id='room_type',
             options=get_options(
-                ['Entire House/apt', 'Private room', 'Shared room', 'Hotel room']),
+                ['Entire home/apt', 'Private room', 'Shared room', 'Hotel room']),
             searchable=False,
             clearable=False,
             placeholder='Room Type'
@@ -226,14 +233,21 @@ column_slider = dbc.Col(
                 14: '14',
             },
             value=7
-        ),)
+        ),),
+        html.Br(),
+        html.Hr(),
     ]
+)
+
+# Column for displaying the app callback result after clicking
+# on the prediction button
+prediction_column = dbc.Col(
+    html.Center(id='output-submit')
 )
 
 # Column for price prediction button
 column_button = dbc.Col(
     [
-        html.Br(),
         html.Hr(),
         html.Center((dbc.Button('Make Price Prediction', color='primary',
                                 id='btn-submit', n_clicks=0)))
@@ -244,9 +258,9 @@ column_button = dbc.Col(
 layout = dbc.Container(
     fluid=True,
     children=[
-        dbc.Row([prediction_column]),
         dbc.Row([column1, column2]),
         dbc.Row([column_slider]),
+        dbc.Row([prediction_column]),
         dbc.Row([column_button])
     ],
     style={'margin': 'auto'}
@@ -290,8 +304,8 @@ def update_output(clicks, occupancy, listing_count,
         return get_prediction(occupancy, listing_count,
                               availability_90, num_reviews,
                               num_bath, num_bed, num_bedroom,
-                              min_nights, room_type, property_type,
-                              bathroom_type, has_about, has_neighborhood_overview,
+                              min_nights, room_type, property_type, bathroom_type,
+                              has_about, has_neighborhood_overview,
                               account_age, has_profile_pic, identity_verified,
                               is_superhost, instant_bookable,
                               neighbourhood)

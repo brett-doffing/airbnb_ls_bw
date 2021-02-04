@@ -1,5 +1,6 @@
 import dash
 import dash_bootstrap_components as dbc
+import joblib
 
 """
 https://github.com/facultyai/dash-bootstrap-components
@@ -57,3 +58,4 @@ app = dash.Dash(
 app.config.suppress_callback_exceptions = True  # see https://dash.plot.ly/urls
 app.title = 'AirBnB Predictions'  # appears in browser title bar
 server = app.server
+pipeline = joblib.load('assets/hong_kong_airbnb.pkl')
