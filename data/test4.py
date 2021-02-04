@@ -15,9 +15,27 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
+df = pd.read_csv('https://raw.githubusercontent.com/leibo411/airbnb_ls_bw/main/data/listings3.csv')
+
+def wrangle_bathrooms_text(x):
+    try:
+        # Split bathroom_text
+        split_text = str(x).split()
+        # Grab what is hopefully a float
+        first_split = split_text[0]
+        # if float assignment fails, see exception
+        num_bathrooms = float(first_split)
+    except ValueError:
+        # These are all half-baths
+        return 0.5
+    else:
+        return num_bathrooms
+
+df['bathrooms'] = df.bathrooms_text.apply(wrangle_bathrooms_text)
+
 # Function to load in data from the Airbnb hong kong
 def load_data():
-  df = pd.read_csv('https://raw.githubusercontent.com/leibo411/airbnb_ls_bw/main/data/listings3.csv')
+  # df = pd.read_csv('https://raw.githubusercontent.com/leibo411/airbnb_ls_bw/main/data/listings3.csv')
   df_number = df.select_dtypes(include='number')
   df_number = df_number.drop(columns=['id', 'scrape_id', 'neighbourhood_group_cleansed', 'bathrooms', 'calendar_updated', 'license', 'availability_60', 'number_of_reviews_l30d', 
   'maximum_nights_avg_ntm', 'review_scores_communication', 'review_scores_location', 'availability_90', 'review_scores_checkin', 'calculated_host_listings_count_entire_homes', 
@@ -33,6 +51,8 @@ def load_data():
 
 df = load_data()
 
+# print(df.head())
+
 # identify the target for the model
 X = np.array(df.drop(columns=['price', 'host_location'])) # might have to be a numpy array, original code was  X = np.array(df.drop(columns='Survived'))
 y = df['price']
@@ -46,7 +66,7 @@ X_test = scaler.fit_transform(X_test1)
 
 columns = ['host_total_listings_count', 'latitude', 'longitude', 'accommodates',
        'bedrooms', 'beds', 'minimum_nights', 'maximum_nights', 'availability_30', 'availability_365',
-       'number_of_reviews']
+       'number_of_reviews', 'bathrooms']
 
 # Building the model
 nn2 = models.Sequential()
@@ -71,48 +91,3 @@ nn2_history = nn2.fit(X_train,
                   epochs=1000,
                   batch_size=256,
                   validation_split = 0.1)
-
-# def nn_model_evaluation(model, skip_epochs=0, X_train=X_train, X_test=X_test, y_train=y_train, y_test=y_test):
-#     """
-#     For a given neural network model that has already been fit, prints for the train and tests sets the MSE and r squared
-#     values, a line graph of the loss in each epoch, and a scatterplot of predicted vs. actual values with a line
-#     representing where predicted = actual values. Optionally, a value for skip_epoch can be provided, which skips that
-#     number of epochs in the line graph of losses (useful in cases where the loss in the first epoch is orders of magnitude
-#     larger than subsequent epochs). Training and test sets can also optionally be specified.
-#     """
-
-    # # MSE and r squared values
-    # y_test_pred = model.predict(X_test)
-    # y_train_pred = model.predict(X_train)
-    # print("Training MSE:", round(mean_squared_error(y_train, y_train_pred),4))
-    # print("Validation MSE:", round(mean_squared_error(y_test, y_test_pred),4))
-    # print("\nTraining r2:", round(r2_score(y_train, y_train_pred),4))
-    # print("Validation r2:", round(r2_score(y_test, y_test_pred),4))
-    
-    # # Line graph of losses
-    # model_results = model.history.history
-    # plt.plot(list(range((skip_epochs+1),len(model_results['loss'])+1)), model_results['loss'][skip_epochs:], label='Train')
-    # plt.plot(list(range((skip_epochs+1),len(model_results['val_loss'])+1)), model_results['val_loss'][skip_epochs:], label='Test', color='green')
-    # plt.legend()
-    # plt.title('Training and test loss at each epoch', fontsize=14)
-    # plt.show()
-    
-    # # Scatterplot of predicted vs. actual values
-    # fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
-    # fig.suptitle('Predicted vs. actual values', fontsize=14, y=1)
-    # plt.subplots_adjust(top=0.93, wspace=0)
-    
-    # ax1.scatter(y_test, y_test_pred, s=2, alpha=0.7)
-    # ax1.plot(list(range(2,8)), list(range(2,8)), color='black', linestyle='--')
-    # ax1.set_title('Test set')
-    # ax1.set_xlabel('Actual values')
-    # ax1.set_ylabel('Predicted values')
-    
-    # ax2.scatter(y_train, y_train_pred, s=2, alpha=0.7)
-    # ax2.plot(list(range(2,8)), list(range(2,8)), color='black', linestyle='--')
-    # ax2.set_title('Train set')
-    # ax2.set_xlabel('Actual values')
-    # ax2.set_ylabel('')
-    # ax2.set_yticklabels(labels='')
-    
-    # plt.show()
