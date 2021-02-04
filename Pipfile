@@ -12,6 +12,8 @@ dash-bootstrap-components = "*"
 pandas = "*"
 xgboost = "*"
 category-encoders = "*"
+keras = "*"
+tensorflow = "*"
 
 [dev-packages]
 
