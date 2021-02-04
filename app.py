@@ -1,5 +1,6 @@
 import dash
 import dash_bootstrap_components as dbc
+import joblib
 
 """
 https://github.com/facultyai/dash-bootstrap-components
@@ -44,15 +45,17 @@ dbc.themes.YETI
 """
 
 external_stylesheets = [
-    dbc.themes.UNITED, # Bootswatch theme
-    'https://use.fontawesome.com/releases/v5.9.0/css/all.css', # for social media icons
+    dbc.themes.UNITED,  # Bootswatch theme
+    'https://use.fontawesome.com/releases/v5.9.0/css/all.css',
 ]
 
-meta_tags=[
+meta_tags = [
     {'name': 'viewport', 'content': 'width=device-width, initial-scale=1'}
 ]
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets, meta_tags=meta_tags)
-app.config.suppress_callback_exceptions = True # see https://dash.plot.ly/urls
-app.title = 'AirBnB Predictions' # appears in browser title bar
+app = dash.Dash(
+    __name__, external_stylesheets=external_stylesheets, meta_tags=meta_tags)
+app.config.suppress_callback_exceptions = True  # see https://dash.plot.ly/urls
+app.title = 'AirBnB Predictions'  # appears in browser title bar
 server = app.server
+pipeline = joblib.load('assets/hong_kong_airbnb.pkl')
