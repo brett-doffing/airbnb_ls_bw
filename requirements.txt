@@ -8,8 +8,6 @@
 -i https://pypi.org/simple
 category-encoders==2.2.2
 dash-bootstrap-components==0.11.1
-dash-core-components==1.15.0
-dash-html-components==1.1.2
 dash==1.19.0
 gunicorn==20.0.4
 keras==2.4.3
