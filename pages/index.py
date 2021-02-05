@@ -93,54 +93,6 @@ column1 = dbc.Col(
         dcc.Input(id='beds', type='number',
                   placeholder='Beds', min=1, step=1),
         html.Br(), html.Br(),
-        # dcc.Dropdown(
-        #     id='bathroom_type',
-        #     options=get_options(['private', 'regular', 'shared']),
-        #     searchable=False,
-        #     clearable=False,
-        #     placeholder='Bathroom Type'
-        # ),
-        # html.Br(), html.Br(),
-        # dcc.Dropdown(
-        #     id='neighbourhood',
-        #     options=get_options(['Yau Tsim Mong', 'Yuen Long', 'Wan Chai', 'Central & Western',
-        #                          'Eastern', 'Kowloon City', 'Sha Tin', 'Sham Shui Po', 'Islands',
-        #                          'Sai Kung', 'Wong Tai Sin', 'North', 'Tsuen Wan', 'Kwun Tong',
-        #                          'Southern', 'Tuen Mun', 'Kwai Tsing', 'Tai Po']),
-        #     searchable=False,
-        #     clearable=False,
-        #     placeholder='Neighbourhood'
-        # ),
-        # html.Br(), html.Br(),
-        # dcc.RadioItems(
-        #     id='identity_verified',
-        #     options=[
-        #         {'label': 'Identity Verified', 'value': 1},
-        #         {'label': 'Identity Not Verified', 'value': 0},
-        #     ],
-        #     value=1,
-        #     labelStyle={'display': 'inline-block', 'padding': '10px'}
-        # ),
-        # html.Br(), html.Br(),
-        # dcc.RadioItems(
-        #     id='is_superhost',
-        #     options=[
-        #         {'label': 'Superhost', 'value': 1},
-        #         {'label': 'Not Superhost', 'value': 0},
-        #     ],
-        #     value=1,
-        #     labelStyle={'display': 'inline-block', 'padding': '10px'}
-        # ),
-        # html.Br(), html.Br(),
-        # dcc.RadioItems(
-        #     id='instant_bookable',
-        #     options=[
-        #         {'label': 'Instant Booking', 'value': 1},
-        #         {'label': 'No Instant Booking', 'value': 0},
-        #     ],
-        #     value=1,
-        #     labelStyle={'display': 'inline-block', 'padding': '10px'}
-        # ),
     ]
 )
 
@@ -165,64 +117,6 @@ column2 = dbc.Col(
         dcc.Input(id='num_bath', type='number',
                   placeholder='Number of Bathrooms', min=1, step=0.5),
         html.Br(), html.Br(),
-        # dcc.Dropdown(
-        #     id='room_type',
-        #     options=get_options(
-        #         ['Entire home/apt', 'Private room', 'Shared room', 'Hotel room']),
-        #     searchable=False,
-        #     clearable=False,
-        #     placeholder='Room Type'
-        # ),
-        # html.Br(), html.Br(),
-        # dcc.Dropdown(
-        #     id='property_type',
-        #     options=get_options(['apartment', 'guesthouse', 'bed and breakfast', 'bungalow',
-        #                          'hotel', 'guest suite', 'condominium', 'boutique hotel', 'house',
-        #                          'hostel', 'serviced apartment', 'loft', 'townhouse', 'Entire loft',
-        #                          'Entire apartment', 'Entire condominium',
-        #                          'Entire serviced apartment', 'treehouse', 'chalet', 'Entire house',
-        #                          'Entire guest suite', 'Private room', 'aparthotel', 'cottage',
-        #                          'castle', 'cabin', 'tiny house', 'resort', 'minsu', 'hut',
-        #                          'kezhan', 'villa', 'earth house', 'nature lodge', 'Tiny house',
-        #                          'Entire home/apt', 'igloo', 'Entire guesthouse', 'Casa particular',
-        #                          'Entire townhouse', 'Entire place', 'Entire bungalow',
-        #                          'Earth house', 'casa particular', 'Entire cottage', 'pension',
-        #                          'Campsite', 'Island', 'Boat', 'Cave', 'Tent', 'Castle', 'Pension',
-        #                          'Dome house', 'Entire villa', 'Farm stay', 'Shared room']),
-        #     searchable=False,
-        #     clearable=False,
-        #     placeholder='Property Type'
-        # ),
-        # html.Br(), html.Br(),
-        # dcc.RadioItems(
-        #     id='has_about',
-        #     options=[
-        #         {'label': 'Has About', 'value': 1},
-        #         {'label': 'No About', 'value': 0},
-        #     ],
-        #     value=1,
-        #     labelStyle={'display': 'inline-block', 'padding': '10px'}
-        # ),
-        # html.Br(), html.Br(),
-        # dcc.RadioItems(
-        #     id='has_neighborhood_overview',
-        #     options=[
-        #         {'label': 'Has Neighborhood Overview', 'value': 1},
-        #         {'label': 'No Neighborhood Overview', 'value': 0},
-        #     ],
-        #     value=1,
-        #     labelStyle={'display': 'inline-block', 'padding': '10px'}
-        # ),
-        # html.Br(), html.Br(),
-        # dcc.RadioItems(
-        #     id='has_profile_pic',
-        #     options=[
-        #         {'label': 'Has Profile Pic', 'value': 1},
-        #         {'label': 'No Profile Pic', 'value': 0},
-        #     ],
-        #     value=1,
-        #     labelStyle={'display': 'inline-block', 'padding': '10px'}
-        # ),
     ]
 )
 
