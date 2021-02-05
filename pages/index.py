@@ -6,7 +6,7 @@ import dash_html_components as html
 import pandas as pd
 from dash.dependencies import Input, Output, State
 # Imports from this application
-from app import app
+from app import app, pipeline
 import keras
 import numpy as np
 
