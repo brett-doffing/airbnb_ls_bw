@@ -10,6 +10,10 @@ Change into the directory:
 
 `cd airbnb_ls_bw`
 
+Install environment dependencies:
+
+`pipenv install`
+
 Start the python environment:
 
 `pipenv shell`
